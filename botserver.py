@@ -12,7 +12,7 @@ app.config.update(
     SESSION_COOKIE_PATH = '/medibot/'
 )
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+settings.DBPATH+settings.DBNAME
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sql  ite:///'+settings.DBPATH+settings.DBNAME
 # db = SQLAlchemy(app)
 
 ######################## interne imports, NACH creation der db #####################
@@ -28,7 +28,7 @@ def update():
         # handle_update(update)
         return "" #"" = 200 responsee
     else:
-        return "This page is reserved for the Telegram-studIP-Bot (/)"
+        return "This page is reserved for the MediBot (/)"
 
 
 ####################################################################################
