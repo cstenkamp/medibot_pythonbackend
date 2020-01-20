@@ -25,7 +25,9 @@ def update():
     if request.method == 'POST':
         update = request.data.decode("utf8")
         update = json.loads(update)
+        print("====================================== REQUEST.DATA ======================================")
         print(request.data)
+        print("====================================== UPDATE ======================================")
         print(update)
         # handle_update(update)
         return "" #"" = 200 responsee

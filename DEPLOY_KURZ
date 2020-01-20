@@ -1,0 +1,64 @@
+DEPLOY_KURZ
+
+-nachdem man apache2 installiert hat ist der web-stuff in /var/www -> darein soll der python-code 
+-einfachste botserver.py variante:
+	from flask import Flask
+	app = Flask(__name__)
+	@app.route("/")
+	def hello():
+		return "hello"
+	if __name__ == "__main__":
+		app.run(host="0.0.0.0")
+-dadrin stehen auch die app.routes, also die domain-pfade
+-ebenfalls in dem ordner: botserver.wsgi:
+	import sys
+	sys.path.insert(0, "/var/www/studIPBot")
+	from botserver import app as application
+-in /etc/apache2/sites-available/000-default.conf die apache-config machen:
+
+	<Virtualhost *:80>
+	    ServerName cstenkamp.de
+
+	    <Directory /var/www/> <!-- für die normalen websites -->
+	        Options Indexes FollowSymLinks Multiviews
+	        AllowOverride All
+	        Order allow,deny
+	        allow from all
+	    </Directory>
+
+	    WSGIDaemonProcess todobotserver user=www-data group=www-data
+	    WSGIScriptAlias /todobot /var/www/todoBot/todobotserver.wsgi
+	    <Directory /var/www/todoBot>
+	        WSGIProcessGroup todobotserver
+	        WSGIApplicationGroup todobotserver
+	        WSGIScriptReloading On
+	        Order deny,allow
+	        Allow from all
+	        Require all granted
+	    </Directory>
+
+	    WSGIDaemonProcess studipbotserver user=www-data group=www-data
+	    WSGIScriptAlias /studipbot /var/www/studIPBot/studipbotserver.wsgi   <!-- <- Das /studipbot ist dann die domain!! -->
+	    <Directory /var/www/studIPBot>
+	        WSGIProcessGroup studipbotserver
+	        WSGIApplicationGroup studipbotserver
+	        WSGIScriptReloading On
+	        Order deny,allow
+	        Allow from all
+	        Require all granted
+	    </Directory>
+
+		#RewriteEngine on
+		#RewriteCond %{SERVER_NAME} =cstenkamp.de
+		#RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+	</Virtualhost>
+
+	-aktivieren mit sudo a2ensite 000-default.conf | sudo service apache2 reload  ( See "systemctl status apache2.service" and "journalctl -xe" for detail)
+	--> auch nach veränderungen am website-code muss man apache2 reloaden!!
+	-was man printet landet in /var/log/apache2/error.log  -> tail -f das
+
+-HTTPS-zertifikat:
+	-clone from letsencrypt
+	[comment out our wsgidemonprocess in /etc/apache2/sites-available/000-default.conf mit hashes, dann reload apache2 daemon]
+	-make sure that namecheap has a root record to the IP: https://www.namecheap.com/support/knowledgebase/article.aspx/319/2237/how-can-i-set-up-an-a-address-record-for-my-domain, https://community.letsencrypt.org/t/no-valid-ip-address-found/107092/6
+	-run letsencrypt-auto
