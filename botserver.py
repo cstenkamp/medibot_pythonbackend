@@ -1,7 +1,7 @@
 import sys
 sys.path.append("pydevd-pycharm.egg")
 import pydevd_pycharm
-pydevd_pycharm.settrace('2a02:8109:1a40:512e:db6b:6686:392c:ded5', port=12345, stdoutToServer=True, stderrToServer=True)
+pydevd_pycharm.settrace('31.17.253.171', port=12345, stdoutToServer=True, stderrToServer=True)
 
 ############################### externe imports ####################################
 from flask import Flask, request, redirect, url_for
