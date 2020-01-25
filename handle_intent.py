@@ -1,7 +1,14 @@
 import json
+from os import path
+
+from sample_jsons import SAMPLE_PAYLOAD_JSON
 
 
 MEDITATION_STANDARD_LENGTH = 3
+
+MP3_ROOT_DIR = 'https://cstenkamp.de/meditation_files'
+FILES_ROOT_DIR = '/var/www/medibot_pythonbackend'
+
 
 def handle_intent(intent_name, req_json):
     if intent_name == 'meditation.start':
@@ -17,82 +24,25 @@ def start_meditation(req_json):
     meditation_length = int(meditation_length) if meditation_length else MEDITATION_STANDARD_LENGTH
     #TODO: wenn json['queryResult']['parameters']['meditation-length'] gesetzt ist erst in x minuten
 
-    if meditation_length == 3:
-        file = 'res/FreeMindfulness3MinuteBreathing.mp3'
+    resp_meditation = SAMPLE_PAYLOAD_JSON
+    where_media = [num for num, i in enumerate(resp_meditation['payload']['google']['richResponse']['items']) if 'mediaResponse' in i.keys()][0]
+
+    with open(path.join(FILES_ROOT_DIR, 'meditations.json')) as json_file:
+        meditation_data = json.load(json_file)
+
+    if str(meditation_length) in list(meditation_data.keys()):
+        correct_meditation = meditation_data[str(meditation_length)]
+        correct_meditation = json.loads(json.dumps(correct_meditation).replace('BASE_DIR', MP3_ROOT_DIR))
+        resp_meditation['payload']['google']['richResponse']['items'][where_media]['mediaResponse']['mediaObjects'] = [correct_meditation]
+        #TODO: ein random bild bei den meditationen mitschicken
 
         #https://cloud.google.com/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2#webhookresponse
-        # tmp = """{
+        # a = json.loads("""{
         #     "fulfillmentText": "<speak>This is a text response<break time="3s"/>asdf</speak>"
-        #      }"""
-        # a = json.loads(tmp)
-        #a = {'fulfillmentText': '<speak>This is a text response<break time="3s"/>asdf</speak>'}
-        # a = {'conversationToken': '["_actions_on_google"]',
-        #      'expectedInputs': [
-        #          {'inputPrompt': {
-        #              'richInitialPrompt': {
-        #                  'items': [
-        #                      {
-        #                          'simpleResponse': {
-        #                              'textToSpeech': 'My favarata albam'
-        #                          },
-        #                      },
-        #                      {
-        #                         'mediaResponse'
-        #                      }
-        #                  ]
-        #              }
-        #          }}
-        #      ]}
+        #      }""")
 
-        a = json.loads("""{
-  "payload": {
-    "google": {
-      "expectUserResponse": true,
-      "richResponse": {
-        "items": [
-          {
-            "simpleResponse": {
-              "textToSpeech": "This is a media response example."
-            }
-          },
-          {
-            "mediaResponse": {
-              "mediaType": "AUDIO",
-              "mediaObjects": [
-                {
-                  "contentUrl": "https://cstenkamp.de/FreeMindfulness3MinuteBreathing.mp3",
-                  "description": "A funky Jazz tune",
-                  "icon": {
-                    "url": "https://storage.googleapis.com/automotive-media/album_art.jpg",
-                    "accessibilityText": "Album cover of an ocean view"
-                  },
-                  "name": "Jazz in Paris"
-                }
-              ]
-            }
-          }
-        ],
-        "suggestions": [
-          {
-            "title": "Basic Card"
-          },
-          {
-            "title": "List"
-          },
-          {
-            "title": "Carousel"
-          },
-          {
-            "title": "Browsing Carousel"
-          }
-        ]
-      }
-    }
-  }
-}
-""")
-
-        return a
+        return resp_meditation
+    return ''
 
 
 def get_username(json):

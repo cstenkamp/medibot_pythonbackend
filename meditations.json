@@ -1,0 +1,31 @@
+{
+  "3": {
+    "contentUrl": "BASE_DIR/FreeMindfulness3MinuteBreathing.mp3",
+    "description": "3 Minutes Mindfulness Meditation",
+    "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+    },
+    "name": "3 Minutes Mindfulness Meditation"
+  },
+
+  "5": {
+  "contentUrl": "BASE_DIR/MARC5MinuteBreathing.mp3",
+  "description": "5 Minutes Mindful Breathing",
+  "icon": {
+      "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+      "accessibilityText": "Man sitting in front of river"
+  },
+  "name": "5 Minutes Mindful Breathing Meditation"
+  },
+
+  "10": {
+  "contentUrl": "BASE_DIR/PadraigTenMinuteMindfulnessOfBreathing.mp3",
+  "description": "10 Minutes Mindful Breathing",
+  "icon": {
+      "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+      "accessibilityText": "Man sitting in front of river"
+  },
+  "name": "10 Minutes Mindful Breathing Meditation"
+  }
+}
