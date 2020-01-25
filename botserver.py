@@ -1,12 +1,14 @@
-import sys
-sys.path.append("pydevd-pycharm.egg")
-import pydevd_pycharm
-pydevd_pycharm.settrace('localhost', port=12345, stdoutToServer=True, stderrToServer=True)
+#https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html#
+# import sys
+# sys.path.append("pydevd-pycharm.egg")
+# import pydevd_pycharm
+# pydevd_pycharm.settrace('localhost', port=12345, stdoutToServer=True, stderrToServer=True)
 
 ############################### externe imports ####################################
 from flask import Flask, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import json
+import requests, curlify
 
 ####################################################################################
 
@@ -23,6 +25,7 @@ app.config.update(
 ######################## interne imports, NACH creation der db #####################
 # from bothelper import handle_update, send_message
 
+import handle_intent
 ####################################################################################
 
 @app.route("/", methods=["POST", "GET"])
@@ -31,13 +34,34 @@ def update():
         update = request.data.decode("utf8")
         update = json.loads(update)
         print("====================================== REQUEST.DATA ======================================")
-        print(request.data)
+        #print(request.data)
+        response = handle_intent.handle_intent(update['queryResult']['intent']['displayName'], update)
+        # post_command('http://'+remote_addr, requestHeaders, response)
+        return response
         print("====================================== UPDATE ======================================")
         print(update)
         # handle_update(update)
         return "" #"" = 200 responsee
     else:
         return "This page is reserved for the MediBot (/)"
+
+
+
+def post_command(url, headers, content):
+    reqres = requests.post(url, headers=headers, data=content)
+    result = ["CURL command: "+str(curlify.to_curl(reqres.request))]
+    #print("CURL command:", curlify.to_curl(reqres.request))
+    if reqres.status_code != 200:
+        result.append('Return code: '+str(reqres.status_code))
+        result.append(reqres.text)
+    else:
+        if reqres.content:
+            result.append(str(reqres.json()))
+        else:
+            result.append("Successful.")
+    return result
+
+
 
 
 ####################################################################################
