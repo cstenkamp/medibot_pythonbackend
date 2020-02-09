@@ -9,6 +9,7 @@ from flask import Flask, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import json
 import requests, curlify
+import settings
 
 ####################################################################################
 
@@ -19,8 +20,9 @@ app.config.update(
     SESSION_COOKIE_PATH = '/medibot/'
 )
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sql  ite:///'+settings.DBPATH+settings.DBNAME
-# db = SQLAlchemy(app)
+print('Database file', 'sqlite://'+settings.DBPATH+settings.DBNAME)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+settings.DBPATH+settings.DBNAME
+db = SQLAlchemy(app)
 
 ######################## interne imports, NACH creation der db #####################
 # from bothelper import handle_update, send_message

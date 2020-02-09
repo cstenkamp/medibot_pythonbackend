@@ -1,8 +1,8 @@
 import json
 from os import path
 
-from sample_jsons import SAMPLE_PAYLOAD_JSON
-
+from sample_jsons import SAMPLE_PAYLOAD_JSON, SAMPLE_RESPONSE_JSON
+import userdb
 
 MEDITATION_STANDARD_LENGTH = 3
 
@@ -13,6 +13,29 @@ FILES_ROOT_DIR = '/var/www/medibot_pythonbackend'
 def handle_intent(intent_name, req_json):
     if intent_name == 'meditation.start':
         return start_meditation(req_json)
+    elif intent_name == 'session.login':
+        return login(req_json)
+    elif intent_name == 'session.register':
+        return register(req_json)
+
+
+def login(req_json):
+    username = req_json['queryResult']['parameters']['username']
+    user = userdb.load_user(username)
+    if not user:
+        print("This user doesn't exist")
+        return SAMPLE_RESPONSE_JSON
+    return SAMPLE_RESPONSE_JSON
+
+
+def register(req_json):
+    username = req_json['queryResult']['parameters']['username']
+    user = userdb.create_user(username)
+    if not user:
+        print("This username exists already!")
+
+    else:
+        print("success.")
 
 
 def start_meditation(req_json):
