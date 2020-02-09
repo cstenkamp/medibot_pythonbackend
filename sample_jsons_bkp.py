@@ -14,13 +14,13 @@ SAMPLE_PAYLOAD_JSON = {
                             "mediaType": "AUDIO",
                             "mediaObjects": [
                                 {
-                                    "name": "3 Minute Meditation",
-                                    "contentUrl": "http://www.freemindfulness.org/FreeMindfulness3MinuteBreathing.mp3",
-                                    "description": "3 Minute Meditation",
-                                    "largeImage": {
+                                    "contentUrl": "https://cstenkamp.de/meditation_files/Jazz_In_Paris.mp3",
+                                    "description": "A funky Jazz tune",
+                                    "icon": {
                                         "url": "https://storage.googleapis.com/automotive-media/album_art.jpg",
                                         "accessibilityText": "Album cover of an ocean view"
-                                    }
+                                    },
+                                    "name": "Jazz in Paris"
                                 }
                             ]
                         }
@@ -28,11 +28,17 @@ SAMPLE_PAYLOAD_JSON = {
                 ],
                 "suggestions": [
                     {
-                        "title": "That was appropriate"
+                        "title": "Basic Card"
                     },
                     {
-                        "title": "I didn't like this one"
+                        "title": "List"
                     },
+                    {
+                        "title": "Carousel"
+                    },
+                    {
+                        "title": "Browsing Carousel"
+                    }
                 ]
             }
         }

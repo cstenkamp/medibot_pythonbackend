@@ -34,8 +34,10 @@ def start_meditation(req_json):
         correct_meditation = meditation_data[str(meditation_length)]
         correct_meditation = json.loads(json.dumps(correct_meditation).replace('BASE_DIR', MP3_ROOT_DIR))
         resp_meditation['payload']['google']['richResponse']['items'][where_media]['mediaResponse']['mediaObjects'] = [correct_meditation]
+        print("Selected Meditation", correct_meditation)
         #TODO: ein random bild bei den meditationen mitschicken
 
+        # TODO vielleich nach beenden des mp3s fragen wie's war? https://developers.google.com/assistant/conversational/responses#MediaResponseHandlingCallback, https://stackoverflow.com/questions/53099327/autoplay-media-until-times-up-in-google-dialogflow
         #https://cloud.google.com/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2#webhookresponse
         # a = json.loads("""{
         #     "fulfillmentText": "<speak>This is a text response<break time="3s"/>asdf</speak>"
