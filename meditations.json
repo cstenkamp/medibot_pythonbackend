@@ -1,31 +1,184 @@
 {
-  "3": {
-    "contentUrl": "http://www.freemindfulness.org/FreeMindfulness3MinuteBreathing.mp3",
-    "description": "3 Minutes Mindfulness Meditation",
-    "icon": {
+  "Breath Practice":
+  {
+    "3": {
+      "contentUrl": "http://www.freemindfulness.org/FreeMindfulness3MinuteBreathing.mp3",
+      "description": "3 Minutes Mindfulness Meditation",
+      "icon": {
         "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
         "accessibilityText": "Man sitting in front of river"
+      },
+      "name": "3 Minutes Mindfulness Meditation"
     },
-    "name": "3 Minutes Mindfulness Meditation"
+    "5": {
+      "contentUrl": "http://www.freemindfulness.org/MARC5MinuteBreathing.mp3",
+      "description": "5 Minutes Mindful Breathing",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": "5 Minutes Mindful Breathing Meditation"
+    },
+    "10": {
+      "contentUrl": "http://www.freemindfulness.org/FreeMindfulness10MinuteBreathing.mp3",
+      "description": "10 Minutes Mindful Breathing",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": "10 Minutes Mindful Breathing Meditation"
+    },
+    "11": {
+      "contentUrl": "http://www.freemindfulness.org/PadraigTenMinuteMindfulnessOfBreathing.mp3",
+      "description": "11 Minutes Mindful Breathing",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": "10 Minutes Mindful Breathing Meditation"
+    },
+    "6": {
+      "contentUrl": "http://www.freemindfulness.org/StillMind6MinuteBreathAwareness.mp3",
+      "description": "Six minute breath awareness",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": "Melbourne Mindfulness Centre & Still Mind"
+    }
   },
-
-  "5": {
-  "contentUrl": "http://www.freemindfulness.org/MARC5MinuteBreathing.mp3",
-  "description": "5 Minutes Mindful Breathing",
-  "icon": {
-      "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
-      "accessibilityText": "Man sitting in front of river"
+  "Body Scan":
+  {
+    "45": {
+      "contentUrl": "http://www.freemindfulness.org/UCSD45MinuteBodyScan.mp3",
+      "description": "Forty five minute body scan",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": "UCSD Center for mindfulness"
+    },
+        "20": {
+      "contentUrl": "http://www.freemindfulness.org/UCSD20MinuteBodyScan.mp3",
+      "description": "Twenty minute body scan",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": "UCSD Center for mindfulness"
+    },
+    "40": {
+      "contentUrl": "http://www.freemindfulness.org/UCSD20MinuteBodyScan.mp3",
+      "description": "40 minute body scan",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": " Kieran Fleck, Senior CBT Therapist"
+    },
+    "4": {
+      "contentUrl": "http://www.freemindfulness.org/StillMind4MinuteBodyScan.mp3",
+      "description": "4 minute body scan",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": " Kieran Fleck, Senior CBT Therapist"
+    },
+    "15": {
+      "contentUrl": "http://www.freemindfulness.org/BreathworksBodyScan.mp3",
+      "description": "15 minute body scan",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": " Vidyamala Burch, Breathworks"
+    }
   },
-  "name": "5 Minutes Mindful Breathing Meditation"
+  "Sitting Meditation":
+  {
+        "21": {
+      "contentUrl": "http://www.freemindfulness.org/UCSD20MinuteSeatedMeditation.mp3",
+      "description": "Seated meditation",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": " UCSD Center for mindfulness "
+    },
+    "12": {
+      "contentUrl": "http://www.freemindfulness.org/MARCBreathSoundBodyMeditation.mp3",
+      "description": " Breath, sound and body ",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": " Mindful Awareness Research Centre, UCLA   "
+    },
+    "20": {
+      "contentUrl": "http://www.freemindfulness.org/KieranFleckSittingMeditation.mp3",
+      "description": "Sitting meditation",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": "Kieran Fleck, Senior CBT Therapist "
+    },
+    "20": {
+      "contentUrl": "http://www.freemindfulness.org/MARCCompleteMeditation.mp3",
+      "description": " Breath, sounds, body, thoughts, emotions",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": "Mindful Awareness Research Centre, UCLA "
+    }
   },
-
-  "10": {
-  "contentUrl": "http://www.freemindfulness.org/FreeMindfulness10MinuteBreathing.mp3",
-  "description": "10 Minutes Mindful Breathing",
-  "icon": {
-      "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
-      "accessibilityText": "Man sitting in front of river"
+  "Movement Practice" :
+  {
+        "20": {
+      "contentUrl": "http://www.freemindfulness.org/CoreyRoosGentleMindfulYoga.mp3",
+      "description": " Gentle mindful yoga followed by mindfulness of breath",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": "Corey Roos, White Cloud Wellness"
+    }
   },
-  "name": "10 Minutes Mindful Breathing Meditation"
+    "Guided Imagery" :
+  {
+        "8": {
+      "contentUrl": "http://www.freemindfulness.org/CoreyRoosGentleMindfulYoga.mp3",
+      "description": " Mountain meditation ",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": "Corey Roos, White Cloud Wellness"
+    }
+  },
+,,      "Unguided" :
+  {
+        "20": {
+      "contentUrl": "http://www.freemindfulness.org/FreeMindfulness20MinuteBellsWithIntervals.mp3",
+      "description": " Twenty minute bells with 5 minute intervals ",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": " Peter Morgan, Free Mindfulness"
+    },
+          "Unguided" :
+  {
+    "30": {
+      "contentUrl": "http://www.freemindfulness.org/30MinuteJustBells.mp3",
+      "description": " Thirty minute bells with 5 minute intervals ",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": " Peter Morgan, Free Mindfulness"
+    }
   }
 }
