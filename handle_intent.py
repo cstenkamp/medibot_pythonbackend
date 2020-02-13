@@ -1,7 +1,7 @@
 import json
 from os import path
 
-from sample_jsons import SAMPLE_PAYLOAD_JSON, SAMPLE_RESPONSE_JSON
+from sample_jsons import SAMPLE_PAYLOAD_JSON
 import userdb
 
 MEDITATION_STANDARD_LENGTH = 3
@@ -20,22 +20,31 @@ def handle_intent(intent_name, req_json):
 
 
 def login(req_json):
+    print('Logging in.')
     username = req_json['queryResult']['parameters']['username']
     user = userdb.load_user(username)
     if not user:
         print("This user doesn't exist")
-        return SAMPLE_RESPONSE_JSON
-    return SAMPLE_RESPONSE_JSON
+        return {'outputContexts': [{'name': req_json['session']+'/contexts/login-incomplete', "lifespanCount": 5, 'parameters': req_json['queryResult']['parameters']}], "followupEventInput": {"name": "login-failed", "languageCode": "en"}}
+    print("This user exists")
+    # result = {'outputContexts': req_json['queryResult']['outputContexts'], 'parameters': req_json['queryResult']['parameters'], "followupEventInput": {"name": "login-success", "languageCode": "en"}}
+    result = {'outputContexts': [], "followupEventInput": {"name": "login-success", "languageCode": "en"}}
+    result['outputContexts'].append({'name': req_json['session']+'/contexts/login-incomplete', "lifespanCount": 5, 'parameters': req_json['queryResult']['parameters']})
+    # result = {"followupEventInput": {"name": "login-success", "languageCode": "en"}}
+    print(result)
+    return result
 
 
 def register(req_json):
+    print("Registering")
     username = req_json['queryResult']['parameters']['username']
     user = userdb.create_user(username)
     if not user:
         print("This username exists already!")
-
+        return {'outputContexts': [{'name': req_json['session']+'/contexts/login-incomplete', "lifespanCount": 5, 'parameters': req_json['queryResult']['parameters']}], "followupEventInput": {"name": "register-failed", "languageCode": "en"}}
     else:
         print("success.")
+        return {'outputContexts': [{'name': req_json['session']+'/contexts/login-incomplete', "lifespanCount": 5, 'parameters': req_json['queryResult']['parameters']}], "followupEventInput": {"name": "register-success", "languageCode": "en"}}
 
 
 def start_meditation(req_json):

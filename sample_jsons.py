@@ -39,32 +39,3 @@ SAMPLE_PAYLOAD_JSON = {
     }
 }
 
-
-
-SAMPLE_RESPONSE_JSON = {
-    "payload": {
-        "google": {
-            "expectUserResponse": True,
-            "richResponse": {
-                "items": [
-                    {
-                        "simpleResponse": {
-                            "textToSpeech": "Arg! you."
-                        }
-                    }
-                ],
-                "suggestions": []
-            }
-        }
-    },
-    "output_contexts[]": [
-        {
-            "name": "login.failed",
-            "lifespan-count": 10,
-        }
-    ],
-    "followup_event_input": {
-        "name": "login-failed",
-        "language_code": "en"
-    }
-}
