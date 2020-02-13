@@ -39,3 +39,21 @@ SAMPLE_PAYLOAD_JSON = {
     }
 }
 
+SAMPLE_RESPONSE_JSON = {
+    "payload": {
+        "google": {
+            "expectUserResponse": True,
+            "richResponse": {
+                "items": [
+                    {
+                        "simpleResponse": {
+                            "textToSpeech": "Ok, here is a meditation for you."
+                        }
+                    }
+                ],
+                "suggestions": []
+            }
+        }
+    }
+}
+

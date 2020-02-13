@@ -1,6 +1,5 @@
 {
-  "Breath Practice":
-  {
+  "Breath Practice": {
     "3": {
       "contentUrl": "http://www.freemindfulness.org/FreeMindfulness3MinuteBreathing.mp3",
       "description": "3 Minutes Mindfulness Meditation",
@@ -47,8 +46,7 @@
       "name": "Melbourne Mindfulness Centre & Still Mind"
     }
   },
-  "Body Scan":
-  {
+  "Body Scan": {
     "45": {
       "contentUrl": "http://www.freemindfulness.org/UCSD45MinuteBodyScan.mp3",
       "description": "Forty five minute body scan",
@@ -58,7 +56,7 @@
       },
       "name": "UCSD Center for mindfulness"
     },
-        "20": {
+    "20": {
       "contentUrl": "http://www.freemindfulness.org/UCSD20MinuteBodyScan.mp3",
       "description": "Twenty minute body scan",
       "icon": {
@@ -95,9 +93,8 @@
       "name": " Vidyamala Burch, Breathworks"
     }
   },
-  "Sitting Meditation":
-  {
-        "21": {
+  "Sitting Meditation": {
+    "21": {
       "contentUrl": "http://www.freemindfulness.org/UCSD20MinuteSeatedMeditation.mp3",
       "description": "Seated meditation",
       "icon": {
@@ -124,7 +121,7 @@
       },
       "name": "Kieran Fleck, Senior CBT Therapist "
     },
-    "20": {
+    "19": {
       "contentUrl": "http://www.freemindfulness.org/MARCCompleteMeditation.mp3",
       "description": " Breath, sounds, body, thoughts, emotions",
       "icon": {
@@ -134,9 +131,8 @@
       "name": "Mindful Awareness Research Centre, UCLA "
     }
   },
-  "Movement Practice" :
-  {
-        "20": {
+  "Movement Practice": {
+    "20": {
       "contentUrl": "http://www.freemindfulness.org/CoreyRoosGentleMindfulYoga.mp3",
       "description": " Gentle mindful yoga followed by mindfulness of breath",
       "icon": {
@@ -146,21 +142,28 @@
       "name": "Corey Roos, White Cloud Wellness"
     }
   },
-    "Guided Imagery" :
-  {
-        "8": {
+  "Guided Imagery": {
+    "8": {
       "contentUrl": "http://www.freemindfulness.org/CoreyRoosGentleMindfulYoga.mp3",
-      "description": " Mountain meditation ",
+      "description": "Guided Imagery: Mountain meditation (Gentle mindful Yoga)",
       "icon": {
         "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
         "accessibilityText": "Man sitting in front of river"
       },
-      "name": "Corey Roos, White Cloud Wellness"
+      "name": "Peter Morgan, Free Mindfulness. Adapted from Jon Kabat-Zinn"
+    },
+    "7": {
+      "contentUrl": "http://www.freemindfulness.org/PadraigTheMountain.mp3",
+      "description": "Guided Imagery: Mountain meditation ",
+      "icon": {
+        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+        "accessibilityText": "Man sitting in front of river"
+      },
+      "name": "Padraig O'Morain. Adapted from Jon Kabat-Zinn"
     }
   },
-,,      "Unguided" :
-  {
-        "20": {
+  "Unguided": {
+    "20": {
       "contentUrl": "http://www.freemindfulness.org/FreeMindfulness20MinuteBellsWithIntervals.mp3",
       "description": " Twenty minute bells with 5 minute intervals ",
       "icon": {
@@ -169,16 +172,16 @@
       },
       "name": " Peter Morgan, Free Mindfulness"
     },
-          "Unguided" :
-  {
-    "30": {
-      "contentUrl": "http://www.freemindfulness.org/30MinuteJustBells.mp3",
-      "description": " Thirty minute bells with 5 minute intervals ",
-      "icon": {
-        "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
-        "accessibilityText": "Man sitting in front of river"
-      },
-      "name": " Peter Morgan, Free Mindfulness"
+    "Unguided": {
+      "30": {
+        "contentUrl": "http://www.freemindfulness.org/30MinuteJustBells.mp3",
+        "description": " Thirty minute bells with 5 minute intervals ",
+        "icon": {
+          "url": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1393&q=80",
+          "accessibilityText": "Man sitting in front of river"
+        },
+        "name": " Peter Morgan, Free Mindfulness"
+      }
     }
   }
 }

@@ -8,3 +8,4 @@ SQLAlchemy==1.3.12
 Werkzeug==0.16.0
 requests
 curlify
+pydevd-pycharm~=193.6494.30
