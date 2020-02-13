@@ -1,4 +1,4 @@
-# # # # # #https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html#
+# # # # #https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html#
 # import sys
 # sys.path.append("pydevd-pycharm.egg")
 # import pydevd_pycharm
@@ -39,9 +39,9 @@ def update():
         #print(request.data)
         response = handle_intent.handle_intent(update['queryResult']['intent']['displayName'], update)
         # post_command('http://'+remote_addr, requestHeaders, response)
+        if response:
+            print("responding: ", response)
         return response
-        print("====================================== UPDATE ======================================")
-        print(update)
         # handle_update(update)
         return "" #"" = 200 responsee
     else:

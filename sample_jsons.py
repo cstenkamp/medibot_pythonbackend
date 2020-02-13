@@ -57,3 +57,30 @@ SAMPLE_RESPONSE_JSON = {
     }
 }
 
+
+SAMPLE_IMAGE_JSON = {
+  "payload": {
+    "google": {
+      "expectUserResponse": True,
+      "richResponse": {
+        "items": [
+          {
+            "simpleResponse": {
+              "textToSpeech": "Here's your emotional history"
+            }
+          },
+          {
+            "basicCard": {
+              "title": "Your emotional history with me",
+              "image": {
+                "url": "IMAGE_URL",
+                "accessibilityText": "<bargraph with your emotional history>"
+              },
+              "imageDisplayOptions": "DEFAULT"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

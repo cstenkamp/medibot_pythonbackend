@@ -1,7 +1,9 @@
 import json
 from os import path
+from copy import deepcopy
 
-from sample_jsons import SAMPLE_PAYLOAD_JSON, SAMPLE_RESPONSE_JSON
+from sample_jsons import SAMPLE_PAYLOAD_JSON, SAMPLE_RESPONSE_JSON, SAMPLE_IMAGE_JSON
+from list_users_in_table import create_sentiment_graph
 import userdb
 
 MEDITATION_STANDARD_LENGTH = 3
@@ -19,12 +21,53 @@ def handle_intent(intent_name, req_json):
         return login(req_json)
     elif intent_name == 'session.register':
         return register(req_json)
+    elif intent_name == 'sentiment.eval.initial':
+        return store_sentiment(req_json)
+    elif intent_name == 'sentiment.analyse':
+        return show_sentiment(req_json)
+
+
+def show_sentiment(req_json):
+    username = userdb.UserSession.query.filter(userdb.UserSession.sessionid == req_json['session']).one_or_none().user
+    imgpath = create_sentiment_graph(username, show_initial=2) #TODO zwischen vorher und nachher unterscheiden können
+    imgpath = imgpath.replace('/var/www/html/', 'https://cstenkamp.de/')
+    resp = SAMPLE_IMAGE_JSON
+    resp['payload']['google']['richResponse']['items'][1]['basicCard']['image']['url'] = imgpath
+    return resp
+
+
+
+def standard_response(text):
+    resp = deepcopy(SAMPLE_RESPONSE_JSON)
+    resp['payload']['google']['richResponse']['items'][0]['simpleResponse']['textToSpeech'] = text
+    return resp
+
+
+
+def store_sentiment(req_json):
+    assert req_json['queryResult']['allRequiredParamsPresent']
+    print("storing sentiment")
+    #username = req_json['queryResult']['parameters']['username'].lower() #TODO warum ist er einfach gone?!
+    username = userdb.UserSession.query.filter(userdb.UserSession.sessionid == req_json['session']).one_or_none().user
+
+    if req_json['queryResult']['intent']['displayName'] == 'sentiment.eval.initial':
+        strength = req_json['queryResult']['parameters']['initial-sentiment-strength']
+        sentiment = req_json['queryResult']['parameters']['initial-sentiment']
+        userdb.store_sentiment(username, sentiment, strength, is_intitial=True)
+    else:
+        strength = req_json['queryResult']['parameters']['final-sentiment-strength']
+        sentiment = req_json['queryResult']['parameters']['final-sentiment']
+        userdb.store_sentiment(username, sentiment, strength, is_initial=False)
+
+    return standard_response("Okay, I noted down that feeling.")
+
+
 
 
 def login(req_json):
     print('Logging in.')
     username = req_json['queryResult']['parameters']['username'].lower()
-    user = userdb.load_user(username)
+    user = userdb.load_user(username, req_json['session'])
     if not user:
         print("This user doesn't exist")
         return {'outputContexts': [{'name': req_json['session']+'/contexts/login-incomplete', "lifespanCount": 5, 'parameters': req_json['queryResult']['parameters']}], "followupEventInput": {"name": "login-failed", "languageCode": "en"}}
@@ -40,7 +83,7 @@ def login(req_json):
 def register(req_json):
     print("Registering")
     username = req_json['queryResult']['parameters']['username'].lower()
-    user = userdb.create_user(username)
+    user = userdb.create_user(username, req_json['session'])
     if not user:
         print("This username exists already!")
         return {'outputContexts': [{'name': req_json['session']+'/contexts/login-incomplete', "lifespanCount": 5, 'parameters': req_json['queryResult']['parameters']}], "followupEventInput": {"name": "register-failed", "languageCode": "en"}}
@@ -75,9 +118,8 @@ def start_meditation(req_json):
             meditation_length = lens[argmin(len_diffs)]
         else:
             closest_meditations = get_two_closest(lens, meditation_length)
-            resp = SAMPLE_RESPONSE_JSON
+            resp = standard_response('Sorry, but I don\'t have a meditation of that length. Alternatively I can offer you one that is '+' or '.join([str(i) for i in closest_meditations])+' minutes long.')
             resp['payload']['google']['richResponse']['suggestions'] = [{'title': str(i)+' minutes'} for i in closest_meditations]
-            resp['payload']['google']['richResponse']['items'][0]['simpleResponse']['textToSpeech'] = 'Sorry, but I don\'t have a meditation of that length. Alternatively I can offer you one that is '+' or '.join([str(i) for i in closest_meditations])+' minutes long.'
             #resp['outputContexts'] = [{'name': req_json['session']+'/contexts/meditation-active', "lifespanCount": 5, 'parameters': {key: val for key, val in req_json['queryResult']['parameters'].items() if key != 'meditation-length'}}]
             resp['outputContexts'] = [{key: (val if key != 'parameters' else {k2: v2 for k2,v2 in val.items() if k2 != 'meditation-length'}) for key, val in i.items()} for i in req_json['queryResult']['outputContexts']]
             #TODO er vergisst den meditation-type for some fucking reason wieder. Rausfinden wie man das ändern kann v.v
