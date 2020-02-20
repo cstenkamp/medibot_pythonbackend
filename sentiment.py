@@ -5,9 +5,9 @@ from math import pi
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-from userdb import UserSentiment #geht nicht, dann hat python circular imports
 from matplotlib import pyplot as plt
+
+import userdb
 
 PRIVATE_HOSTNAMES = ['chris-ThinkPad-E480', 'AronLaptop']
 
@@ -34,8 +34,8 @@ def create_sentiment_graph(for_user, show_initial=True): #show_initial kann True
                    ]
     #TODO die per API von den entities ziehen https://dialogflow.com/docs/reference/v2-auth-setup
     sentiment_dict = {key: [] for key in SENTIMENTS}
-    qry = session.query(UserSentiment).filter(UserSentiment.user==for_user, UserSentiment.is_initial==int(show_initial)).all() if show_initial < 2 else \
-            session.query(UserSentiment).filter(UserSentiment.user==for_user).all()
+    qry = session.query(userdb.UserSentiment).filter(userdb.UserSentiment.user==for_user, userdb.UserSentiment.is_initial==int(show_initial)).all() if show_initial < 2 else \
+            session.query(userdb.UserSentiment).filter(userdb.UserSentiment.user==for_user).all()
     #TODO im frontend gibt man da die letzten Tage an, das noch machen
     for sent in qry:
         try:
