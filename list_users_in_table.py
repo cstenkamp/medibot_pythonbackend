@@ -1,11 +1,8 @@
 import socket
 import argparse
-import tempfile
-from os.path import join, basename
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from matplotlib import pyplot as plt
 
 from userdb import User, UserSession, UserSentiment
 
@@ -35,28 +32,6 @@ def main():
     else:
         list_tables()
 
-
-def create_sentiment_graph(for_user, show_initial=True): #show_initial kann True, False, 2 sein. bei 2 zeigt's alle.
-    SENTIMENTS = ['happy', 'stressed', 'relaxed', 'lazy', 'bad'] #TODO die per API von den entities ziehen https://dialogflow.com/docs/reference/v2-auth-setup
-    sentiment_dict = {key: [] for key in SENTIMENTS}
-    qry = session.query(UserSentiment).filter(UserSentiment.user==for_user, UserSentiment.is_initial==int(show_initial)).all() if show_initial < 2 else \
-            session.query(UserSentiment).filter(UserSentiment.user==for_user).all()
-    #TODO im frontend gibt man da die letzten Tage an, das noch machen
-    for sent in qry:
-        try:
-            sentiment_dict[sent.sentiment].append(sent.strength)
-        except KeyError:
-            sentiment_dict[sent.sentiment] = [sent.strength]
-    averages = {key: sum(val)/len(val) if len(val) > 0 else 0 for key, val in sentiment_dict.items()}
-
-    fig, ax = plt.subplots(1)
-    ax.bar(averages.keys(), averages.values(), 0.6, color='b')
-    ax.set(ylim=[0,7], title="Average "+("initial" if show_initial else "final")+" sentiment")
-    filename = tempfile.mkstemp('.png')[1]
-    filename = join('/var/www/html/emotion_imgs', basename(filename)) #TODO den nicht als wert haben, und irgendwie für sicherheit hier sorgen, muss leider http sein
-    plt.savefig(filename)
-    plt.close(fig)
-    return filename
 
 
 def list_tables():

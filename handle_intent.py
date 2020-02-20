@@ -3,7 +3,7 @@ from os import path
 from copy import deepcopy
 
 from sample_jsons import SAMPLE_PAYLOAD_JSON, SAMPLE_RESPONSE_JSON, SAMPLE_IMAGE_JSON
-from list_users_in_table import create_sentiment_graph
+# from sentiment import create_sentiment_graph #TODO circular imports
 import userdb
 
 MEDITATION_STANDARD_LENGTH = 3
