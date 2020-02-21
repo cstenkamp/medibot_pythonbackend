@@ -47,6 +47,12 @@ def update():
     else:
         return "This page is reserved for the MediBot (/)"
 
+@app.route("/helloworld")
+def hello():
+    return """
+        Hello World!<br /><br />
+        <a href="/">Back to index</a>
+    """
 
 
 def post_command(url, headers, content):
