@@ -3,6 +3,7 @@ import argparse
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sentiment import create_sentiment_graph
 
 from userdb import User, UserSession, UserSentiment
 

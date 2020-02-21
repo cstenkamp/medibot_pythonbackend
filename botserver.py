@@ -1,8 +1,8 @@
-# # # #https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html#
-# import sys
-# sys.path.append("pydevd-pycharm.egg")
-# import pydevd_pycharm
-# pydevd_pycharm.settrace('localhost', port=12345, stdoutToServer=True, stderrToServer=True)
+# # #https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html#
+import sys
+sys.path.append("pydevd-pycharm.egg")
+import pydevd_pycharm
+pydevd_pycharm.settrace('localhost', port=12345, stdoutToServer=True, stderrToServer=True)
 
 ############################### externe imports ####################################
 from flask import Flask, request, redirect, url_for
