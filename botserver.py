@@ -1,8 +1,10 @@
-# # #https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html#
-import sys
-sys.path.append("pydevd-pycharm.egg")
-import pydevd_pycharm
-pydevd_pycharm.settrace('localhost', port=12345, stdoutToServer=True, stderrToServer=True)
+# # # #https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html#
+# import sys
+# sys.path.append("pydevd-pycharm.egg")
+# import pydevd_pycharm
+# pydevd_pycharm.settrace('localhost', port=12345, stdoutToServer=True, stderrToServer=True)
+
+print("botserver started")
 
 ############################### externe imports ####################################
 from flask import Flask, request, redirect, url_for
@@ -13,16 +15,16 @@ import settings
 
 ####################################################################################
 
-app = Flask(__name__) #that's what's imported in the wsgi file
-app.config.from_object(__name__)
-app.config.update(
+application = Flask(__name__) #that's what's imported in the wsgi file
+application.config.from_object(__name__)
+application.config.update(
     SESSION_COOKIE_NAME = 'session_medibot',
     SESSION_COOKIE_PATH = '/medibot/'
 )
 
-print('Database file', 'sqlite://'+settings.DBPATH+settings.DBNAME)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+settings.DBPATH+settings.DBNAME
-db = SQLAlchemy(app)
+print('Database file', 'sqlite:///'+settings.DBPATH+settings.DBNAME)
+application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + settings.DBPATH + settings.DBNAME
+db = SQLAlchemy(application)
 
 ######################## interne imports, NACH creation der db #####################
 # from bothelper import handle_update, send_message
@@ -30,7 +32,11 @@ db = SQLAlchemy(app)
 import handle_intent
 ####################################################################################
 
-@app.route("/", methods=["POST", "GET"])
+# wenn das mit den routen nicht hinhaut:
+#   -https://stackoverflow.com/questions/7558249/nginx-configuration-for-static-sites-in-root-directory-flask-apps-in-subdirecto
+#   -https://stackoverflow.com/questions/18967441/add-a-prefix-to-all-flask-routes
+#   -https://www.nginx.com/blog/creating-nginx-rewrite-rules/#server_name
+@application.route("/", methods=["POST", "GET"])
 def update():
     if request.method == 'POST':
         update = request.data.decode("utf8")
@@ -47,7 +53,7 @@ def update():
     else:
         return "This page is reserved for the MediBot (/)"
 
-@app.route("/helloworld")
+@application.route("/helloworld")
 def hello():
     return """
         Hello World!<br /><br />
@@ -75,4 +81,4 @@ def post_command(url, headers, content):
 ####################################################################################
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    application.run(host="0.0.0.0")

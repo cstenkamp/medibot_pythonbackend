@@ -1,3 +1,3 @@
 import sys
-sys.path.insert(0, "/var/www/medibot_pythonbackend")
-from botserver import app as application
+sys.path.insert(0, "/var/www/html/medibot_pythonbackend")
+from botserver import application

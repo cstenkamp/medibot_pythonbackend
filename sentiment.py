@@ -2,20 +2,24 @@ import socket
 import tempfile
 from os.path import join, basename, abspath
 from math import pi
+import os
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from matplotlib import pyplot as plt
 
 import userdb
+import settings
 
 PRIVATE_HOSTNAMES = ['chris-ThinkPad-E480', 'AronLaptop']
+
+EMOTION_IMG_BASE_DIR = '/var/www/html/emotion_imgs'
 
 hostname = socket.gethostname()
 if hostname in PRIVATE_HOSTNAMES:
     sqlite_path = 'sqlite:///'+join(abspath('.'), 'db', 'user_states.db')
 else:
-    sqlite_path = 'sqlite:////var/www/medibot_pythonbackend/db/user_states.db'
+    sqlite_path = 'sqlite:///' + settings.DBPATH + settings.DBNAME
 
 engine = create_engine(sqlite_path)
 Session = sessionmaker(bind=engine)
@@ -58,7 +62,8 @@ def create_sentiment_graph(for_user, show_initial=True): #show_initial kann True
     ax.set(ylim=[0,7], title="Average "+("initial" if show_initial else "final")+" sentiment")
 
     filename = tempfile.mkstemp('.png')[1]
-    filename = join('/var/www/html/emotion_imgs', basename(filename))
+    os.makedirs(EMOTION_IMG_BASE_DIR, exist_ok=True)
+    filename = join(EMOTION_IMG_BASE_DIR, basename(filename))
     #TODO den nicht als wert haben, und irgendwie für sicherheit hier sorgen, muss leider http sein
     if hostname in PRIVATE_HOSTNAMES:
         plt.show()

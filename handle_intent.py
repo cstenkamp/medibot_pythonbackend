@@ -30,7 +30,7 @@ def handle_intent(intent_name, req_json):
 def show_sentiment(req_json):
     username = userdb.UserSession.query.filter(userdb.UserSession.sessionid == req_json['session']).one_or_none().user
     imgpath = create_sentiment_graph(username, show_initial=2) #TODO zwischen vorher und nachher unterscheiden können
-    imgpath = imgpath.replace('/var/www/html/', 'https://cstenkamp.de/')
+    imgpath = imgpath.replace('/var/www/html/', 'https://cstenkamp.xyz/')
     resp = SAMPLE_IMAGE_JSON
     resp['payload']['google']['richResponse']['items'][1]['basicCard']['image']['url'] = imgpath
     return resp
