@@ -4,8 +4,9 @@ import os
 from os.path import join
 
 import curlify
+import settings
 
-URL = 'https://www.cstenkamp.xyz/medibot/'
+URL = settings.BOT_DOMAIN
 
 content = json.dumps('''{
 	"responseId": "ea3d77e8-ae27-41a4-9e1d-174bd461b68c",

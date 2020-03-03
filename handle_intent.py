@@ -5,11 +5,9 @@ from copy import deepcopy
 from sample_jsons import SAMPLE_PAYLOAD_JSON, SAMPLE_RESPONSE_JSON, SAMPLE_IMAGE_JSON
 from sentiment import create_sentiment_graph
 import userdb
+import settings
 
 MEDITATION_STANDARD_LENGTH = 3
-
-MP3_ROOT_DIR = 'https://cstenkamp.de/meditation_files'
-FILES_ROOT_DIR = '/var/www/medibot_pythonbackend'
 
 argmax = lambda l: max(zip(l, range(len(l))))[1]
 argmin = lambda l: min(zip(l, range(len(l))))[1]
@@ -29,8 +27,8 @@ def handle_intent(intent_name, req_json):
 
 def show_sentiment(req_json):
     username = userdb.UserSession.query.filter(userdb.UserSession.sessionid == req_json['session']).one_or_none().user
-    imgpath = create_sentiment_graph(username, show_initial=2) #TODO zwischen vorher und nachher unterscheiden können
-    imgpath = imgpath.replace('/var/www/html/', 'https://cstenkamp.xyz/')
+    imgpath = create_sentiment_graph(username, show_initial=2, show_starplot=True) #TODO show_initial kann 3 verschiedene Werte haben und show_starplot auch 2!
+    imgpath = imgpath.replace(settings.EMOTION_BASE_DIR, settings.IMAGE_DOMAIN)
     resp = SAMPLE_IMAGE_JSON
     resp['payload']['google']['richResponse']['items'][1]['basicCard']['image']['url'] = imgpath
     return resp
@@ -106,7 +104,7 @@ def start_meditation(req_json):
     resp_meditation = SAMPLE_PAYLOAD_JSON
     where_media = [num for num, i in enumerate(resp_meditation['payload']['google']['richResponse']['items']) if 'mediaResponse' in i.keys()][0]
 
-    with open(path.join(FILES_ROOT_DIR, 'meditations.json')) as json_file:
+    with open(path.join(settings.FILES_ROOT_DIR, 'meditations.json')) as json_file:
         meditation_data = json.load(json_file)
 
     correct_type = meditation_data[meditation_type]
@@ -128,7 +126,7 @@ def start_meditation(req_json):
 
 
     correct_meditation = correct_type[str(meditation_length)]
-    correct_meditation = json.loads(json.dumps(correct_meditation).replace('BASE_DIR', MP3_ROOT_DIR))
+    correct_meditation = json.loads(json.dumps(correct_meditation).replace('BASE_DIR', settings.MP3_ROOT_DOMAIN))
     resp_meditation['payload']['google']['richResponse']['items'][where_media]['mediaResponse']['mediaObjects'] = [correct_meditation]
     print("Selected Meditation", correct_meditation)
     #TODO: ein random bild bei den meditationen mitschicken

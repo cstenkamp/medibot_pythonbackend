@@ -6,13 +6,13 @@ from sqlalchemy.orm import sessionmaker
 from sentiment import create_sentiment_graph
 
 from userdb import User, UserSession, UserSentiment
-
+import settings
 
 hostname = socket.gethostname()
 if hostname == 'chris-ThinkPad-E480':
     sqlite_path = 'sqlite:////home/chris/Documents/UNI/sem_13/conversational_agents/project/db/user_states.db'
 else:
-    sqlite_path = 'sqlite:////var/www/medibot_pythonbackend/db/user_states.db'
+    sqlite_path = 'sqlite:///'+settings.DBPATH+settings.DBNAME
 
 engine = create_engine(sqlite_path)
 Session = sessionmaker(bind=engine)
