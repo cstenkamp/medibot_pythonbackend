@@ -127,11 +127,12 @@ def register(req_json):
 
 def start_meditation(req_json):
     assert get_username(req_json) # TODO ne andere response zurückgeben falls kein User
+    #TODO: wenn json['queryResult']['parameters']['meditation-length'] gesetzt ist erst in x minuten
+
     try:
         parameters = {**[i for i in req_json['alternativeQueryResults'][0]['outputContexts'] if i['name'].endswith('meditation-active')][0]['parameters'], **{key: val for key, val in req_json['queryResult']['parameters'].items() if val}} # Why the fuck do you forget it Dialogflow?!
     except:
         parameters = req_json['queryResult']['parameters']
-
 
     if 'allRequiredParamsPresent' in req_json['queryResult'] and req_json['queryResult']['allRequiredParamsPresent']: #nur nicht da wenn man für slotfilling macht
         print('starting meditation...')
@@ -147,21 +148,14 @@ def start_meditation(req_json):
         correct_type = meditation_data[meditation_type]
         lens = sorted([int(i) for i in correct_type.keys()])
         resp = standard_response('How long a meditation did you have in mind?', [str(i)+' minutes' for i in lens])
-        # resp['outputContexts'] = [{key: (val if key != 'parameters' else {k2: v2 for k2,v2 in val.items() if k2 != 'meditation-length'}) for key, val in i.items()} for i in req_json['queryResult']['outputContexts']]
-        resp['outputContexts'] = [{'name': req_json['session']+'/contexts/meditation-active', "lifespanCount": 5, 'parameters': {key: val for key, val in req_json['queryResult']['parameters'].items() if key != 'meditation-length'}}]
+        resp['outputContexts'] = [{'name': req_json['session']+'/contexts/meditation-active', "lifespanCount": 5, 'parameters': {key: val for key, val in parameters.items() if key != 'meditation-length'}}]
         return resp
-
-
-    # meditation_length = int(meditation_length) if meditation_length else MEDITATION_STANDARD_LENGTH
-    #TODO: wenn json['queryResult']['parameters']['meditation-length'] gesetzt ist erst in x minuten
 
     resp_meditation = SAMPLE_PAYLOAD_JSON
     where_media = [num for num, i in enumerate(resp_meditation['payload']['google']['richResponse']['items']) if
                    'mediaResponse' in i.keys()][0]
-
     with open(path.join(settings.FILES_ROOT_DIR, 'meditations.json')) as json_file:
         meditation_data = json.load(json_file)
-
     correct_type = meditation_data[meditation_type]
     lens = sorted([int(i) for i in correct_type.keys()])
 
@@ -173,24 +167,16 @@ def start_meditation(req_json):
             closest_meditations = get_two_closest(lens, meditation_length)
             resp = standard_response('Sorry, but I don\'t have a meditation of that length. Alternatively I can offer you one that is '+' or '.join([str(i) for i in closest_meditations])+' minutes long.')
             resp['payload']['google']['richResponse']['suggestions'] = [{'title': str(i)+' minutes'} for i in closest_meditations]
-            resp['outputContexts'] = [{key: (val if key != 'parameters' else {k2: v2 for k2,v2 in val.items() if k2 != 'meditation-length'}) for key, val in i.items()} for i in req_json['queryResult']['outputContexts']]
-            resp['outputContexts'] += [{'name': req_json['session']+'/contexts/meditation-active', "lifespanCount": 5, 'parameters': {key: val for key, val in req_json['queryResult']['parameters'].items() if key != 'meditation-length'}}]
+            resp['outputContexts'] = [{'name': req_json['session']+'/contexts/meditation-active', "lifespanCount": 5, 'parameters': {key: val for key, val in parameters.items() if key != 'meditation-length'}}]
             #TODO er vergisst den meditation-type for some fucking reason wieder. Rausfinden wie man das ändern kann v.v
             return resp
-
 
     correct_meditation = correct_type[str(round(meditation_length))]
     correct_meditation = json.loads(json.dumps(correct_meditation).replace('BASE_DIR', settings.MP3_ROOT_DOMAIN))
     resp_meditation['payload']['google']['richResponse']['items'][where_media]['mediaResponse']['mediaObjects'] = [correct_meditation]
     print("Selected Meditation", correct_meditation)
     #TODO: ein random bild bei den meditationen mitschicken
-
     # TODO vielleich nach beenden des mp3s fragen wie's war? https://developers.google.com/assistant/conversational/responses#MediaResponseHandlingCallback, https://stackoverflow.com/questions/53099327/autoplay-media-until-times-up-in-google-dialogflow
-    #https://cloud.google.com/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2#webhookresponse
-    # a = json.loads("""{
-    #     "fulfillmentText": "<speak>This is a text response<break time="3s"/>asdf</speak>"
-    #      }""")
-
     return resp_meditation
 
 
