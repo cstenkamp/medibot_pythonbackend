@@ -27,6 +27,8 @@ def handle_intent(intent_name, req_json):
         return show_sentiment(req_json, True)
     elif intent_name == 'sentiment.snapshot':
         return show_sentiment(req_json, False)
+    elif intent_name == 'meditation.start.parametersthere':
+        print()
 
 
 def show_sentiment(req_json, show_hist):
@@ -53,7 +55,7 @@ def show_sentiment(req_json, show_hist):
 
 
 def image_response(imgpath, textresponse='Here is your image', title='', accessibilitytext='', suggestions=None):
-    resp = SAMPLE_IMAGE_JSON  # TODO entweder history oder snapshot!
+    resp = SAMPLE_IMAGE_JSON
     resp['payload']['google']['richResponse']['items'][1]['basicCard']['image']['url'] = imgpath
     if textresponse:
         resp['payload']['google']['richResponse']['items'][0]['simpleResponse']['textToSpeech'] = textresponse
@@ -124,17 +126,38 @@ def register(req_json):
 
 
 def start_meditation(req_json):
-    assert req_json['queryResult']['allRequiredParamsPresent']
     assert get_username(req_json) # TODO ne andere response zurückgeben falls kein User
+    try:
+        parameters = {**[i for i in req_json['alternativeQueryResults'][0]['outputContexts'] if i['name'].endswith('meditation-active')][0]['parameters'], **{key: val for key, val in req_json['queryResult']['parameters'].items() if val}} # Why the fuck do you forget it Dialogflow?!
+    except:
+        parameters = req_json['queryResult']['parameters']
 
-    print('starting meditation...')
-    meditation_type = req_json['queryResult']['parameters']['meditation-type']
-    meditation_length = req_json['queryResult']['parameters']['meditation-length']
-    meditation_length = int(meditation_length) if meditation_length else MEDITATION_STANDARD_LENGTH
+
+    if 'allRequiredParamsPresent' in req_json['queryResult'] and req_json['queryResult']['allRequiredParamsPresent']: #nur nicht da wenn man für slotfilling macht
+        print('starting meditation...')
+    else:
+        if not parameters['meditation-type']:
+            return '' #typ von dialogflow regeln lassen
+
+    meditation_type = parameters['meditation-type']
+    meditation_length = parameters['meditation-length']
+    if not meditation_length:
+        with open(path.join(settings.FILES_ROOT_DIR, 'meditations.json')) as json_file:
+            meditation_data = json.load(json_file)
+        correct_type = meditation_data[meditation_type]
+        lens = sorted([int(i) for i in correct_type.keys()])
+        resp = standard_response('How long a meditation did you have in mind?', [str(i)+' minutes' for i in lens])
+        # resp['outputContexts'] = [{key: (val if key != 'parameters' else {k2: v2 for k2,v2 in val.items() if k2 != 'meditation-length'}) for key, val in i.items()} for i in req_json['queryResult']['outputContexts']]
+        resp['outputContexts'] = [{'name': req_json['session']+'/contexts/meditation-active', "lifespanCount": 5, 'parameters': {key: val for key, val in req_json['queryResult']['parameters'].items() if key != 'meditation-length'}}]
+        return resp
+
+
+    # meditation_length = int(meditation_length) if meditation_length else MEDITATION_STANDARD_LENGTH
     #TODO: wenn json['queryResult']['parameters']['meditation-length'] gesetzt ist erst in x minuten
 
     resp_meditation = SAMPLE_PAYLOAD_JSON
-    where_media = [num for num, i in enumerate(resp_meditation['payload']['google']['richResponse']['items']) if 'mediaResponse' in i.keys()][0]
+    where_media = [num for num, i in enumerate(resp_meditation['payload']['google']['richResponse']['items']) if
+                   'mediaResponse' in i.keys()][0]
 
     with open(path.join(settings.FILES_ROOT_DIR, 'meditations.json')) as json_file:
         meditation_data = json.load(json_file)
@@ -150,14 +173,13 @@ def start_meditation(req_json):
             closest_meditations = get_two_closest(lens, meditation_length)
             resp = standard_response('Sorry, but I don\'t have a meditation of that length. Alternatively I can offer you one that is '+' or '.join([str(i) for i in closest_meditations])+' minutes long.')
             resp['payload']['google']['richResponse']['suggestions'] = [{'title': str(i)+' minutes'} for i in closest_meditations]
-            #resp['outputContexts'] = [{'name': req_json['session']+'/contexts/meditation-active', "lifespanCount": 5, 'parameters': {key: val for key, val in req_json['queryResult']['parameters'].items() if key != 'meditation-length'}}]
             resp['outputContexts'] = [{key: (val if key != 'parameters' else {k2: v2 for k2,v2 in val.items() if k2 != 'meditation-length'}) for key, val in i.items()} for i in req_json['queryResult']['outputContexts']]
+            resp['outputContexts'] += [{'name': req_json['session']+'/contexts/meditation-active', "lifespanCount": 5, 'parameters': {key: val for key, val in req_json['queryResult']['parameters'].items() if key != 'meditation-length'}}]
             #TODO er vergisst den meditation-type for some fucking reason wieder. Rausfinden wie man das ändern kann v.v
-            print("returning", resp)
             return resp
 
 
-    correct_meditation = correct_type[str(meditation_length)]
+    correct_meditation = correct_type[str(round(meditation_length))]
     correct_meditation = json.loads(json.dumps(correct_meditation).replace('BASE_DIR', settings.MP3_ROOT_DOMAIN))
     resp_meditation['payload']['google']['richResponse']['items'][where_media]['mediaResponse']['mediaObjects'] = [correct_meditation]
     print("Selected Meditation", correct_meditation)
