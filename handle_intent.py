@@ -6,8 +6,10 @@ from sample_jsons import SAMPLE_PAYLOAD_JSON, SAMPLE_RESPONSE_JSON, SAMPLE_IMAGE
 from sentiment import create_sentiment_graph
 import userdb
 import settings
+import pandas as pd
 
 MEDITATION_STANDARD_LENGTH = 3
+STANDARD_EMOTIONSNAPSHOT_LEN = 5
 
 argmax = lambda l: max(zip(l, range(len(l))))[1]
 argmin = lambda l: min(zip(l, range(len(l))))[1]
@@ -21,23 +23,55 @@ def handle_intent(intent_name, req_json):
         return register(req_json)
     elif intent_name == 'sentiment.eval.initial':
         return store_sentiment(req_json)
-    elif intent_name == 'sentiment.analyse':
-        return show_sentiment(req_json)
+    elif intent_name == 'sentiment.history':
+        return show_sentiment(req_json, True)
+    elif intent_name == 'sentiment.snapshot':
+        return show_sentiment(req_json, False)
 
 
-def show_sentiment(req_json):
+def show_sentiment(req_json, show_hist):
     username = userdb.UserSession.query.filter(userdb.UserSession.sessionid == req_json['session']).one_or_none().user
-    imgpath = create_sentiment_graph(username, show_initial=2, show_starplot=True) #TODO show_initial kann 3 verschiedene Werte haben und show_starplot auch 2!
+    if req_json['queryResult']['parameters']['duration'] == '':
+        duration_days = 'all' if show_hist else STANDARD_EMOTIONSNAPSHOT_LEN
+    else:
+        duration_dict = req_json['queryResult']['parameters']['duration']
+        if duration_dict['unit'] in ['mo', 'mos']:
+            duration_dict['amount'] *= 30; duration_dict['unit'] = duration_dict['unit'].replace('mo', 'day') #pandas doesn't know months v.v
+        if duration_dict['unit'] in ['yr', 'yrs']:
+            duration_dict['amount'] *= 365; duration_dict['unit'] = duration_dict['unit'].replace('yr', 'day') #pandas doesn't know months v.v
+        duration_str = str(duration_dict['amount'])+' '+(duration_dict['unit']+'s' if not duration_dict['unit'].endswith('s') else duration_dict['unit'])
+        duration_days = round(pd.to_timedelta(duration_str).total_seconds()/3600/24)
+    imgpath = create_sentiment_graph(username, for_days=duration_days, show_initial=2, show_starplot=not show_hist) #TODO show_initial kann 3 verschiedene Werte haben
     imgpath = imgpath.replace(settings.EMOTION_BASE_DIR, settings.IMAGE_DOMAIN)
-    resp = SAMPLE_IMAGE_JSON
+    if show_hist:
+        if duration_days == 'all':
+            return image_response(imgpath, "Here's your emotional history", 'Your emotional history with me', '<plot with your emotional history>', ['Menu'])
+        else:
+            return image_response(imgpath, "Here's your emotional history of the last "+str(duration_days)+' days', 'Your emotional history of the last '+str(duration_days)+' days', '<plot with your emotional history>', ['Menu'])
+    else:
+        return image_response(imgpath, "Here's your emotional state of the last "+str(duration_days)+' days', 'Your emotional state of the last '+str(duration_days)+' days', '<starplot with your emotional state>', ['Menu'])
+
+
+def image_response(imgpath, textresponse='Here is your image', title='', accessibilitytext='', suggestions=None):
+    resp = SAMPLE_IMAGE_JSON  # TODO entweder history oder snapshot!
     resp['payload']['google']['richResponse']['items'][1]['basicCard']['image']['url'] = imgpath
+    if textresponse:
+        resp['payload']['google']['richResponse']['items'][0]['simpleResponse']['textToSpeech'] = textresponse
+    if title:
+        resp['payload']['google']['richResponse']['items'][1]['basicCard']['title'] = title
+    if accessibilitytext:
+        resp['payload']['google']['richResponse']['items'][1]['basicCard']['accessibilityText'] = accessibilitytext
+    if suggestions:
+        resp['payload']['google']['richResponse']['suggestions'] = [{'title': i} for i in suggestions]
     return resp
 
 
 
-def standard_response(text):
+def standard_response(text, suggestions=None):
     resp = deepcopy(SAMPLE_RESPONSE_JSON)
     resp['payload']['google']['richResponse']['items'][0]['simpleResponse']['textToSpeech'] = text
+    if suggestions:
+        resp['payload']['google']['richResponse']['suggestions'] = [{'title': i} for i in suggestions]
     return resp
 
 
@@ -48,16 +82,14 @@ def store_sentiment(req_json):
     #username = req_json['queryResult']['parameters']['username'].lower() #TODO warum ist er einfach gone?!
     username = userdb.UserSession.query.filter(userdb.UserSession.sessionid == req_json['session']).one_or_none().user
 
+    strength = req_json['queryResult']['parameters']['sentiment-strength']
+    sentiment = req_json['queryResult']['parameters']['sentiment']
     if req_json['queryResult']['intent']['displayName'] == 'sentiment.eval.initial':
-        strength = req_json['queryResult']['parameters']['initial-sentiment-strength']
-        sentiment = req_json['queryResult']['parameters']['initial-sentiment']
         userdb.store_sentiment(username, sentiment, strength, is_intitial=True)
     else:
-        strength = req_json['queryResult']['parameters']['final-sentiment-strength']
-        sentiment = req_json['queryResult']['parameters']['final-sentiment']
         userdb.store_sentiment(username, sentiment, strength, is_initial=False)
 
-    return standard_response("Okay, I noted down that feeling.")
+    return standard_response("Okay, I noted down that feeling.", ["Menu", "Meditation"])  #TODO die standard-suggestion-chips irgendwo eher haben
 
 
 

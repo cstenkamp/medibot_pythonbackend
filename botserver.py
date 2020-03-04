@@ -1,9 +1,6 @@
-# # # #https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html#
-# import sys
-# sys.path.append("pydevd-pycharm.egg")
-# import pydevd_pycharm
-# pydevd_pycharm.settrace('localhost', port=12345, stdoutToServer=True, stderrToServer=True)
-
+import sys
+sys.path.append("pydevd-pycharm.egg")
+import pydevd_pycharm
 print("botserver started")
 
 ############################### externe imports ####################################
@@ -25,6 +22,16 @@ application.config.update(
 print('Database file', 'sqlite:///'+settings.DBPATH+settings.DBNAME)
 application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + settings.DBPATH + settings.DBNAME
 db = SQLAlchemy(application)
+
+######################## now that the app exists, we can connect the debugger! #####################
+# # #https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html
+# # #https://stackoverflow.com/questions/47581248/how-to-remote-debug-flask-request-behind-uwsgi-in-pycharm?rq=1
+
+@application.before_first_request
+def before_first_request():
+    pydevd_pycharm.settrace('localhost', port=12346, stdoutToServer=True, stderrToServer=True)
+    print('debugger connected')
+
 
 ######################## interne imports, NACH creation der db #####################
 # from bothelper import handle_update, send_message

@@ -61,6 +61,10 @@ sudo apt-get update
 sudo apt-get install python-certbot-nginx
 sudo certbot --nginx -d cstenkamp.xyz -d www.cstenkamp.xyz
 
+FOR REMOTE DEBUGGING
+https://stackoverflow.com/questions/47581248/how-to-remote-debug-flask-request-behind-uwsgi-in-pycharm?rq=1
+-app.ini processes auf 1 und enable-threads auf false
+-drauf achten dass die version des debuggers die pyhcarm will installiert ist!
 
 -for some reason muss in /var/www/html/ ein favicon.ico liegen
 
