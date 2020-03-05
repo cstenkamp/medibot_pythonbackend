@@ -29,8 +29,9 @@ db = SQLAlchemy(application)
 
 @application.before_first_request
 def before_first_request():
-    pydevd_pycharm.settrace('localhost', port=12346, stdoutToServer=True, stderrToServer=True)
-    print('debugger connected')
+    pass
+    # pydevd_pycharm.settrace('localhost', port=12346, stdoutToServer=True, stderrToServer=True)
+    # print('debugger connected')
 
 
 ######################## interne imports, NACH creation der db #####################

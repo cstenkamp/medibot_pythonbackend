@@ -6,7 +6,7 @@ SAMPLE_PAYLOAD_JSON = {
                 "items": [
                     {
                         "simpleResponse": {
-                            "textToSpeech": "Ok, here is a meditation for you."
+                            "textToSpeech": "Wonderful, let's embark on a phantastic journey exploring the mind. Make sure you are comfortable and off we go!"
                         }
                     },
                     {
@@ -28,10 +28,13 @@ SAMPLE_PAYLOAD_JSON = {
                 ],
                 "suggestions": [
                     {
-                        "title": "That was appropriate"
+                        "title": "Record final Sentiment"
                     },
                     {
-                        "title": "I didn't like this one"
+                        "title": "Menu"
+                    },
+                    {
+                        "title": "Exit"
                     },
                 ]
             }

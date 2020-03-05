@@ -23,7 +23,9 @@ def handle_intent(intent_name, req_json):
     elif intent_name == 'session.register':
         return register(req_json)
     elif intent_name == 'sentiment.eval.initial':
-        return store_sentiment(req_json)
+        return store_sentiment(req_json, True)
+    elif intent_name == 'sentiment.eval.final':
+        return store_sentiment(req_json, False)
     elif intent_name == 'sentiment.history':
         return show_sentiment(req_json, True)
     elif intent_name == 'sentiment.snapshot':
@@ -121,7 +123,7 @@ def standard_response(text, suggestions=None):
 
 
 
-def store_sentiment(req_json):
+def store_sentiment(req_json, is_initial):
     assert req_json['queryResult']['allRequiredParamsPresent']
     print("storing sentiment")
     #username = req_json['queryResult']['parameters']['username'].lower() #TODO warum ist er einfach gone?!
@@ -129,12 +131,11 @@ def store_sentiment(req_json):
 
     strength = req_json['queryResult']['parameters']['sentiment-strength']
     sentiment = req_json['queryResult']['parameters']['sentiment']
-    if req_json['queryResult']['intent']['displayName'] == 'sentiment.eval.initial':
-        userdb.store_sentiment(username, sentiment, strength, is_intitial=True)
+    userdb.store_sentiment(username, sentiment, strength, is_intitial=is_initial)
+    if is_initial:
+        return standard_response("Okay, I will jot down that you feel "+sentiment+" with an intensity of "+strength, ["Menu", "Meditation", "Exit"])  #TODO die standard-suggestion-chips irgendwo eher haben
     else:
-        userdb.store_sentiment(username, sentiment, strength, is_initial=False)
-
-    return standard_response("Okay, I noted down that feeling.", ["Menu", "Meditation"])  #TODO die standard-suggestion-chips irgendwo eher haben
+        return standard_response("I noted that after this session you feel "+sentiment+" with an intensity of "+strength, ["Menu", "Exit"])  #TODO die standard-suggestion-chips irgendwo eher haben
 
 
 
@@ -169,7 +170,8 @@ def register(req_json):
 
 
 def start_meditation(req_json):
-    assert get_username(req_json) # TODO ne andere response zurückgeben falls kein User
+    # assert get_username(req_json) # TODO ne andere response zurückgeben falls kein User
+    username = userdb.UserSession.query.filter(userdb.UserSession.sessionid == req_json['session']).one_or_none().user
     #TODO: wenn json['queryResult']['parameters']['meditation-length'] gesetzt ist erst in x minuten
 
     try:
