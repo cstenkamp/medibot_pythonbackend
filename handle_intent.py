@@ -2,11 +2,12 @@ import json
 from os import path
 from copy import deepcopy
 
-from sample_jsons import SAMPLE_PAYLOAD_JSON, SAMPLE_RESPONSE_JSON, SAMPLE_IMAGE_JSON
+from sample_jsons import SAMPLE_PAYLOAD_JSON, SAMPLE_RESPONSE_JSON, SAMPLE_IMAGE_JSON, SAMPLE_LIST_JSON, SAMPLE_LISTITEM_JSON_SHORT
 from sentiment import create_sentiment_graph
 import userdb
 import settings
 import pandas as pd
+import csv
 
 MEDITATION_STANDARD_LENGTH = 3
 STANDARD_EMOTIONSNAPSHOT_LEN = 5
@@ -27,6 +28,50 @@ def handle_intent(intent_name, req_json):
         return show_sentiment(req_json, True)
     elif intent_name == 'sentiment.snapshot':
         return show_sentiment(req_json, False)
+    elif intent_name == 'library.refer - How To':
+        return howtomeditate_list(req_json)
+
+
+def howtomeditate_list(req_json):
+    def has_question(req_json):
+        try:
+            req_json['queryResult']['queryText']
+        except:
+            return False
+        else:
+            return req_json['queryResult']['queryText'] == 'actions_intent_OPTION'
+    if not has_question(req_json):
+        with open('reddit_meditation_faq.csv') as csvfile:
+            rdr = csv.reader(csvfile, delimiter=',', quotechar='"')
+            questions = [row[0].strip() for row in rdr]
+            return list_response("Common Questions", questions, textresponse='Of course. There is always Room for improvement. What is the issue?', suggestions=['Menu', 'Exit'])
+    else:
+        complete_dict = {k: v for d in req_json['originalDetectIntentRequest']['payload']['inputs'][0]['arguments'] for k, v in d.items() if k != 'name'}
+        with open('reddit_meditation_faq.csv') as csvfile:
+            rdr = csv.reader(csvfile, delimiter=',', quotechar='"')
+            for row in rdr:
+                if row[0].lower().strip() in [complete_dict['textValue'].lower().strip(), complete_dict['rawText'].lower().strip()]:
+                    return standard_response(row[1], suggestions=['Menu', 'Exit', 'How to Meditate'])
+        return ''
+
+def list_response(listname, lst, textresponse='', suggestions=None):
+    resp = SAMPLE_LIST_JSON
+    resp['payload']['google']['systemIntent']['data']['listSelect']['items'] = []
+    for num, elem in enumerate(lst):
+        tmp = deepcopy(SAMPLE_LISTITEM_JSON_SHORT)
+        tmp['optionInfo']['key'] = num+1
+        tmp['title'] = elem
+        resp['payload']['google']['systemIntent']['data']['listSelect']['items'].append(deepcopy(tmp))
+        if num >= 29:
+            print('More than 30 elements in list', listname)
+            break
+    resp['payload']['google']['systemIntent']['data']['listSelect']['title'] = listname
+    resp['payload']['google']['richResponse']['items'][0]['simpleResponse']['textToSpeech'] = textresponse
+    if suggestions:
+        resp['payload']['google']['richResponse']['suggestions'] = [{'title': i} for i in suggestions]
+    return resp
+
+
 
 
 def show_sentiment(req_json, show_hist):

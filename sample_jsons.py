@@ -84,3 +84,56 @@ SAMPLE_IMAGE_JSON = {
     }
   }
 }
+
+
+SAMPLE_LIST_JSON = {
+  "payload": {
+    "google": {
+      "expectUserResponse": True,
+      "systemIntent": {
+        "intent": "actions.intent.OPTION",
+        "data": {
+          "@type": "type.googleapis.com/google.actions.v2.OptionValueSpec",
+          "listSelect": {
+            "title": "Common Questions",
+            "items": []
+          }
+        }
+      },
+      "richResponse": {
+        "items": [
+          {
+            "simpleResponse": {
+              "textToSpeech": "This is a list example."
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+
+SAMPLE_LISTITEM_JSON =  {
+    "optionInfo": {
+      "key": "SELECTION_KEY_ONE",
+      "synonyms": [
+        "synonym 1",
+        "synonym 2",
+        "synonym 3"
+      ]
+    },
+    "description": "This is a description of a list item.",
+    "image": {
+      "url": "https://storage.googleapis.com/actionsresources/logo_assistant_2x_64dp.png",
+      "accessibilityText": "Image alternate text"
+    },
+    "title": "Title of First List Item"
+  }
+
+SAMPLE_LISTITEM_JSON_SHORT =  {
+    "optionInfo": {
+      "key": "SELECTION_KEY_ONE",
+      "synonyms": []
+    },
+    "title": "Title of First List Item"
+  }
