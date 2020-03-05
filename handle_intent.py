@@ -27,8 +27,6 @@ def handle_intent(intent_name, req_json):
         return show_sentiment(req_json, True)
     elif intent_name == 'sentiment.snapshot':
         return show_sentiment(req_json, False)
-    elif intent_name == 'meditation.start.parametersthere':
-        print()
 
 
 def show_sentiment(req_json, show_hist):
